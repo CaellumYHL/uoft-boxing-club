@@ -1,65 +1,85 @@
-import Image from "next/image";
+import Navbar from '../components/Navbar';
+import { MapPin } from 'lucide-react';
+import Link from 'next/link';
 
 export default function Home() {
   return (
-    <div className="flex min-h-screen items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex min-h-screen w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.tsx file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
+    <main className="min-h-screen bg-background text-white pb-20 overflow-x-hidden">
+      <Navbar />
+
+      {/* Hero Section */}
+      <div className="flex flex-col md:flex-row items-center justify-center gap-12 mt-16 px-4 max-w-5xl mx-auto">
+        {/* Left: Icon/Image */}
+        <div className="relative">
+          {/* Simulating the red glove with a large icon or shape */}
+          <div className="text-red-700 transform -rotate-12 drop-shadow-2xl">
+            <svg width="200" height="200" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+              <path d="M19 4H5C3.89543 4 3 4.89543 3 6V18C3 19.1046 3.89543 20 5 20H19C20.1046 20 21 19.1046 21 18V6C21 4.89543 20.1046 4 19 4Z" stroke="none" />
+              {/* Placeholder for glove shape - using a rounded rect for now to match the "blob" look if no svg */}
+              <rect x="2" y="2" width="20" height="20" rx="6" fill="#B91C1C" />
+            </svg>
+          </div>
         </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
+
+        {/* Right: Text content */}
+        <div className="flex flex-col items-start gap-4">
+          <h1 className="text-5xl font-bold tracking-tight">Box with us!</h1>
+
+          <div className="flex items-start gap-3 text-lg text-gray-200">
+            <MapPin className="mt-1 flex-shrink-0" />
+            <div>
+              <p>St. Michaels College Wellness Studio</p>
+              <p>81 Mary Street</p>
+            </div>
+          </div>
+
+          <Link href="/classes">
+            <button className="mt-4 bg-primary hover:bg-red-700 text-white font-bold py-2 px-8 rounded-full shadow-lg transition-transform hover:scale-105">
+              Get Started!
+            </button>
+          </Link>
         </div>
-      </main>
-    </div>
+      </div>
+
+      {/* Upcoming Classes Section */}
+      <div className="mt-24 px-6 max-w-4xl mx-auto">
+        <h2 className="text-center text-2xl font-semibold mb-8">Upcoming Classes</h2>
+
+        <div className="border border-white/50 rounded-2xl p-10 flex flex-col md:flex-row justify-between items-center gap-8 bg-transparent">
+
+          {/* Class 1 */}
+          <div className="flex flex-col items-center gap-3">
+            <span className="text-xl font-bold">TUES 13</span>
+            <Link href="/classes">
+              <button className="bg-primary hover:bg-red-700 text-white text-sm font-bold py-2 px-6 rounded-lg shadow-md transition">
+                Regular Classes
+              </button>
+            </Link>
+          </div>
+
+          {/* Class 2 */}
+          <div className="flex flex-col items-center gap-3">
+            <span className="text-xl font-bold">FRI 16</span>
+            <Link href="/classes">
+              <button className="bg-primary hover:bg-red-700 text-white text-sm font-bold py-2 px-6 rounded-lg shadow-md transition">
+                Regular Classes
+              </button>
+            </Link>
+          </div>
+
+          {/* Class 3 */}
+          <div className="flex flex-col items-center gap-3">
+            <span className="text-xl font-bold">MON 19</span>
+            <Link href="/events">
+              <button className="bg-secondary hover:bg-blue-600 text-white text-sm font-bold py-2 px-6 rounded-lg shadow-md transition">
+                Calisthenics Colab
+              </button>
+            </Link>
+          </div>
+
+        </div>
+      </div>
+
+    </main>
   );
 }
