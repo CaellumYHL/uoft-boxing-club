@@ -11,7 +11,7 @@ export default function Team() {
 
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-12">
                     {teamMembers.map((member) => (
-                        <div key={member.name} className="bg-white/5 backdrop-blur-sm rounded-2xl p-8 flex flex-col md:flex-row gap-8 items-center border border-white/10 hover:border-white/30 transition shadow-xl">
+                        <div key={member.role} className="bg-white/5 backdrop-blur-sm rounded-2xl p-8 flex flex-col md:flex-row gap-8 items-center border border-white/10 hover:border-white/30 transition shadow-xl">
 
                             {/* Image Placeholder */}
                             <div className="w-40 h-40 bg-gray-600 rounded-full flex-shrink-0 border-4 border-secondary overflow-hidden flex items-center justify-center text-4xl">
@@ -19,11 +19,7 @@ export default function Team() {
                             </div>
 
                             <div className="text-center md:text-left">
-                                <h3 className="text-2xl font-bold text-white mb-2">{member.name}</h3>
                                 <p className="text-secondary font-bold uppercase tracking-wider text-sm mb-4">{member.role}</p>
-                                <p className="text-gray-300 leading-relaxed">
-                                    {member.description}
-                                </p>
                             </div>
                         </div>
                     ))}

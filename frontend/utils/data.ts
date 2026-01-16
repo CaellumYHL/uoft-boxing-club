@@ -8,9 +8,7 @@ export interface Product {
 }
 
 export interface TeamMember {
-    name: string;
     role: string;
-    description: string;
     image?: string;
 }
 
@@ -49,24 +47,16 @@ export const products: Product[] = [
 
 export const teamMembers: TeamMember[] = [
     {
-        name: 'Eithan',
         role: 'Head Coach',
-        description: 'With over 10 years of experience, Eithan focuses on technique and conditioning.',
     },
     {
-        name: 'Nic',
         role: 'Coach / Treasurer',
-        description: 'Specializes in power punches and defensive maneuvers.',
     },
     {
-        name: 'Dionne',
         role: 'Coach',
-        description: 'Expert in footwork and agility. Leads the advanced classes.',
     },
     {
-        name: 'Julia',
         role: 'President',
-        description: 'Managing the club operations and ensuring a great community experience.',
     },
 ];
 

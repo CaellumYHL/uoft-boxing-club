@@ -1,6 +1,7 @@
 import Navbar from '../components/Navbar';
 import { MapPin } from 'lucide-react';
 import Link from 'next/link';
+import GloveIcon from '../components/GloveIcon';
 
 export default function Home() {
   return (
@@ -11,13 +12,9 @@ export default function Home() {
       <div className="flex flex-col md:flex-row items-center justify-center gap-12 mt-16 px-4 max-w-5xl mx-auto">
         {/* Left: Icon/Image */}
         <div className="relative">
-          {/* Simulating the red glove with a large icon or shape */}
-          <div className="text-red-700 transform -rotate-12 drop-shadow-2xl">
-            <svg width="200" height="200" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-              <path d="M19 4H5C3.89543 4 3 4.89543 3 6V18C3 19.1046 3.89543 20 5 20H19C20.1046 20 21 19.1046 21 18V6C21 4.89543 20.1046 4 19 4Z" stroke="none" />
-              {/* Placeholder for glove shape - using a rounded rect for now to match the "blob" look if no svg */}
-              <rect x="2" y="2" width="20" height="20" rx="6" fill="#B91C1C" />
-            </svg>
+          {/* Using the boxing glove SVG */}
+          <div className="transform -rotate-12 drop-shadow-2xl">
+            <GloveIcon className="w-48 h-auto" />
           </div>
         </div>
 
