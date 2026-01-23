@@ -2,17 +2,15 @@
 
 import { useState } from 'react';
 import Navbar from './Navbar';
-import { products } from '../utils/data';
 import { useCart } from '../context/CartContext';
 import { ArrowLeft } from 'lucide-react';
 import Link from 'next/link';
+import { Product } from '../utils/data';
 
-export default function ItemDetailClient({ slug }: { slug: string }) {
+export default function ItemDetailClient({ product }: { product: Product | undefined }) {
   const [quantity, setQuantity] = useState(1);
   const [selectedSize, setSelectedSize] = useState('M');
   const { addToCart } = useCart();
-
-  const product = products.find((p) => p.id === slug);
 
   if (!product) {
     return (
@@ -42,7 +40,7 @@ export default function ItemDetailClient({ slug }: { slug: string }) {
 
         {/* Left: Image Placeholder */}
         <div className="flex-1">
-          <div className="aspect-square bg-secondary rounded-xl shadow-2xl"></div>
+          <div className="aspect-square bg-[#3B71CA] rounded-xl shadow-2xl"></div>
         </div>
 
         {/* Right: Details */}
@@ -69,7 +67,7 @@ export default function ItemDetailClient({ slug }: { slug: string }) {
                   key={size}
                   onClick={() => setSelectedSize(size)}
                   className={`w-10 h-10 rounded border border-white/30 hover:border-white transition
-                    ${selectedSize === size ? 'bg-secondary border-secondary' : 'bg-transparent'}
+                    ${selectedSize === size ? 'bg-[#3B71CA] border-[#3B71CA]' : 'bg-transparent'}
                   `}
                 >
                   {size}
@@ -91,7 +89,7 @@ export default function ItemDetailClient({ slug }: { slug: string }) {
           {/* Add to Cart Button */}
           <button
             onClick={handleAddToCart}
-            className="bg-primary hover:bg-red-700 text-white font-bold py-3 px-10 rounded-full transition shadow-lg shadow-red-900/20 active:scale-95"
+            className="bg-[#C92C2C] hover:bg-red-700 text-white font-bold py-3 px-10 rounded-full transition shadow-lg shadow-red-900/20 active:scale-95"
           >
             Add to Cart
           </button>

@@ -33,8 +33,8 @@ export default function Cart() {
                                 <div key={`${item.id}-${item.size}-${index}`} className="flex flex-col sm:flex-row items-center justify-between gap-6 border-b border-white/10 py-6 last:border-0 capitalize">
 
                                     <div className="flex items-center gap-6">
-                                        <div className="w-24 h-24 bg-secondary rounded-lg flex items-center justify-center">
-                                            <div className="w-16 h-16 bg-secondary rounded"></div>
+                                        <div className="w-24 h-24 bg-[#3B71CA] rounded-lg flex items-center justify-center">
+                                            <div className="w-16 h-16 bg-[#3B71CA] rounded"></div>
                                         </div>
                                         <div>
                                             <h3 className="font-bold text-xl">{item.name}</h3>
@@ -83,7 +83,7 @@ export default function Cart() {
 
                             <button
                                 onClick={handleCheckout}
-                                className="bg-primary hover:bg-red-700 text-white font-bold py-4 px-12 rounded-full shadow-lg transition transform hover:scale-105"
+                                className="bg-[#C92C2C] hover:bg-red-700 text-white font-bold py-4 px-12 rounded-full shadow-lg transition transform hover:scale-105"
                             >
                                 Checkout
                             </button>

@@ -21,8 +21,8 @@ export default function GloveIcon({ className }: GloveIconProps) {
             <path d="M86.5046 210.714C86.5046 210.714 103.252 231.634 132.786 251.347C162.967 271.482 192.659 273.729 192.659 273.729L181.326 290.174C181.326 290.174 155.771 286.902 123.69 265.973C91.6078 245.043 77.1949 224.692 77.1949 224.692L86.5046 210.714Z" fill="#700F0F" />
             <path d="M262.042 129.175C262.947 137.691 273.486 137.978 279.146 139.888C284.806 141.799 293.635 147.781 293.437 148.766C293.24 149.751 279.968 144.434 265.138 153.506C253.667 160.504 246.864 173.857 244.581 178.383C241.274 184.915 238.811 195.911 246.803 201.125C256.515 207.461 263.074 199.455 266.242 195.283C269.409 191.111 279.637 169.139 290.788 164.097C300.511 159.682 305.803 163.962 305.803 163.962C305.803 163.962 308.146 159.444 309.512 156.325C310.879 153.206 312.242 149.799 312.242 149.799C312.242 149.799 306.566 139.667 301.87 132.816C297.173 125.964 285.973 117.13 274.677 118.004C265.546 118.73 261.757 126.539 262.042 129.175Z" fill="#700F0F" />
             <defs>
-                <filter id="filter0_d_4_33" x="40.4538" y="27.9888" width="282.385" height="323.313" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
-                    <feFlood flood-opacity="0" result="BackgroundImageFix" />
+                <filter id="filter0_d_4_33" x="40.4538" y="27.9888" width="282.385" height="323.313" filterUnits="userSpaceOnUse" colorInterpolationFilters="sRGB">
+                    <feFlood floodOpacity="0" result="BackgroundImageFix" />
                     <feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" result="hardAlpha" />
                     <feOffset dy="4" />
                     <feGaussianBlur stdDeviation="2" />

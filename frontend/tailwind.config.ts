@@ -13,6 +13,9 @@ const config: Config = {
         primary: '#C92C2C',
         secondary: '#3B71CA',
       },
+      fontFamily: {
+        sans: ['var(--font-outfit)'],
+      },
     },
   },
   plugins: [],

@@ -2,6 +2,8 @@ import Navbar from '../components/Navbar';
 import { MapPin } from 'lucide-react';
 import Link from 'next/link';
 import GloveIcon from '../components/GloveIcon';
+import ClassesSection from '../components/ClassesSection';
+import EventsSection from '../components/EventsSection';
 
 export default function Home() {
   return (
@@ -9,7 +11,7 @@ export default function Home() {
       <Navbar />
 
       {/* Hero Section */}
-      <div className="flex flex-col md:flex-row items-center justify-center gap-12 mt-16 px-4 max-w-5xl mx-auto">
+      <div id="home" className="flex flex-col md:flex-row items-center justify-center gap-12 mt-16 px-4 max-w-5xl mx-auto min-h-[80vh]">
         {/* Left: Icon/Image */}
         <div className="relative">
           {/* Using the boxing glove SVG */}
@@ -30,16 +32,16 @@ export default function Home() {
             </div>
           </div>
 
-          <Link href="/classes">
-            <button className="mt-4 bg-primary hover:bg-red-700 text-white font-bold py-2 px-8 rounded-full shadow-lg transition-transform hover:scale-105">
+          <Link href="#classes">
+            <button className="mt-4 bg-[#C92C2C] hover:bg-red-700 text-white font-bold py-2 px-8 rounded-full shadow-lg transition-transform hover:scale-105 cursor-pointer">
               Get Started!
             </button>
           </Link>
         </div>
       </div>
 
-      {/* Upcoming Classes Section */}
-      <div className="mt-24 px-6 max-w-4xl mx-auto">
+      {/* Upcoming Classes Teaser (Optional - keeping as per original design but linking to full schedule) */}
+      <div className="mt-24 px-6 max-w-4xl mx-auto mb-32">
         <h2 className="text-center text-2xl font-semibold mb-8">Upcoming Classes</h2>
 
         <div className="border border-white/50 rounded-2xl p-10 flex flex-col md:flex-row justify-between items-center gap-8 bg-transparent">
@@ -47,8 +49,8 @@ export default function Home() {
           {/* Class 1 */}
           <div className="flex flex-col items-center gap-3">
             <span className="text-xl font-bold">TUES 13</span>
-            <Link href="/classes">
-              <button className="bg-primary hover:bg-red-700 text-white text-sm font-bold py-2 px-6 rounded-lg shadow-md transition">
+            <Link href="#classes">
+              <button className="bg-primary hover:bg-red-700 text-white text-sm font-bold py-2 px-6 rounded-full shadow-md transition cursor-pointer transform hover:scale-105">
                 Regular Classes
               </button>
             </Link>
@@ -57,8 +59,8 @@ export default function Home() {
           {/* Class 2 */}
           <div className="flex flex-col items-center gap-3">
             <span className="text-xl font-bold">FRI 16</span>
-            <Link href="/classes">
-              <button className="bg-primary hover:bg-red-700 text-white text-sm font-bold py-2 px-6 rounded-lg shadow-md transition">
+            <Link href="#classes">
+              <button className="bg-primary hover:bg-red-700 text-white text-sm font-bold py-2 px-6 rounded-full shadow-md transition cursor-pointer transform hover:scale-105">
                 Regular Classes
               </button>
             </Link>
@@ -67,8 +69,8 @@ export default function Home() {
           {/* Class 3 */}
           <div className="flex flex-col items-center gap-3">
             <span className="text-xl font-bold">MON 19</span>
-            <Link href="/events">
-              <button className="bg-secondary hover:bg-blue-600 text-white text-sm font-bold py-2 px-6 rounded-lg shadow-md transition">
+            <Link href="#events">
+              <button className="bg-primary hover:bg-red-700 text-white text-sm font-bold py-2 px-6 rounded-full shadow-md transition cursor-pointer transform hover:scale-105">
                 Calisthenics Colab
               </button>
             </Link>
@@ -76,6 +78,12 @@ export default function Home() {
 
         </div>
       </div>
+
+      {/* Full Classes Section */}
+      <ClassesSection />
+
+      {/* Full Events Section */}
+      <EventsSection />
 
     </main>
   );
