@@ -9,10 +9,10 @@ export default function Events() {
   };
 
   return (
-    <main className="min-h-screen bg-background text-white pb-20">
+    <main className="min-h-screen bg-background text-white pb-20 pt-32">
       <Navbar />
 
-      <div className="max-w-3xl mx-auto px-6 mt-10 flex flex-col gap-8">
+      <div className="max-w-3xl mx-auto px-6 flex flex-col gap-8">
 
         {/* Event Card 1 */}
         <div className="bg-secondary rounded-xl p-6 flex flex-col sm:flex-row gap-6 items-center shadow-lg">

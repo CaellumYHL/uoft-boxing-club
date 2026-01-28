@@ -12,10 +12,10 @@ export default function Cart() {
     };
 
     return (
-        <main className="min-h-screen bg-background text-white pb-20">
+        <main className="min-h-screen bg-background text-white pb-20 pt-32">
             <Navbar />
 
-            <div className="max-w-4xl mx-auto px-6 mt-10">
+            <div className="max-w-4xl mx-auto px-6">
                 <h1 className="text-4xl font-bold mb-10">Your Cart</h1>
 
                 {items.length === 0 ? (

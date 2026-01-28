@@ -33,10 +33,10 @@ export default function ItemDetailClient({ product }: { product: Product | undef
   };
 
   return (
-    <main className="min-h-screen bg-background text-white">
+    <main className="min-h-screen bg-background text-white pt-32">
       <Navbar />
 
-      <div className="max-w-5xl mx-auto px-6 mt-16 flex flex-col md:flex-row gap-16">
+      <div className="max-w-5xl mx-auto px-6 flex flex-col md:flex-row gap-16">
 
         {/* Left: Image Placeholder */}
         <div className="flex-1">

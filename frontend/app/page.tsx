@@ -11,7 +11,7 @@ export default function Home() {
       <Navbar />
 
       {/* Hero Section */}
-      <div id="home" className="flex flex-col md:flex-row items-center justify-center gap-12 mt-16 px-4 max-w-5xl mx-auto min-h-[80vh]">
+      <div id="home" className="flex flex-col md:flex-row items-center justify-center gap-12 px-4 max-w-5xl mx-auto min-h-[80vh]">
         {/* Left: Icon/Image */}
         <div className="relative">
           {/* Using the boxing glove SVG */}

@@ -55,7 +55,7 @@ export default function Admin() {
     if (loading) return <div className="min-h-screen bg-background text-white flex items-center justify-center">Loading...</div>;
 
     return (
-        <main className="min-h-screen bg-background text-white pb-20">
+        <main className="min-h-screen bg-background text-white pb-20 pt-32">
             <Navbar />
             <div className="max-w-6xl mx-auto px-6 pt-32">
                 <div className="flex justify-between items-center mb-10">

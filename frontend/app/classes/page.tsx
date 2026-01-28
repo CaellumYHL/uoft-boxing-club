@@ -5,10 +5,10 @@ import Link from 'next/link';
 
 export default function Classes() {
   return (
-    <main className="min-h-screen bg-background text-white pb-20">
+    <main className="min-h-screen bg-background text-white pb-20 pt-32">
       <Navbar />
 
-      <div className="max-w-4xl mx-auto px-6 mt-10">
+      <div className="max-w-4xl mx-auto px-6">
 
         {/* Schedule Grid Container */}
         <div className="border border-white/30 rounded-3xl p-8 bg-transparent">
