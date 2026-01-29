@@ -22,6 +22,7 @@ export default function Navbar() {
     // Default to 'home' on initial load if at top
     if (window.scrollY < 100) {
       setActiveSection('home');
+      window.history.replaceState(null, '', '/#home');
     }
 
     const sections = ['home', 'classes', 'events'];
@@ -35,6 +36,8 @@ export default function Navbar() {
             entries.forEach((entry) => {
               if (entry.isIntersecting) {
                 setActiveSection(id);
+                // Update URL hash when section becomes visible
+                window.history.replaceState(null, '', `/#${id}`);
               }
             });
           },
