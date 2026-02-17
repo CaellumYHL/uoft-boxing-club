@@ -8,8 +8,8 @@ export default function EventsSection() {
     };
 
     return (
-        <div id="events" className="w-full flex flex-col items-center py-20 pb-40">
-            <div className="max-w-3xl mx-auto px-6 w-full flex flex-col gap-8">
+        <div id="events" className="w-full h-screen flex flex-col justify-between items-center px-6">
+            <div className="max-w-4xl w-full pt-30 flex flex-col gap-8">
                 <h2 className="text-center text-3xl font-bold mb-4">Upcoming Events</h2>
 
                 {/* Event Card 1 */}

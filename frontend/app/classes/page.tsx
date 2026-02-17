@@ -25,7 +25,7 @@ export default function Classes() {
           <div className="flex flex-col gap-8">
 
             {/* 4 PM */}
-            <div className="grid grid-cols-3 items-center">
+            <div className="grid grid-cols-3 items  -center">
               <div className="text-xl font-bold pl-4">4 PM</div>
               <div className="col-span-2"></div>
             </div>
