@@ -11,6 +11,9 @@ const outfit = Outfit({
 export const metadata: Metadata = {
   title: "UofT Boxing Club",
   description: "Official website of the UofT Boxing Club",
+  icons: {
+    icon: "/favicon.ico",
+  },
 };
 
 export default function RootLayout({
