@@ -4,7 +4,7 @@ import Link from 'next/link';
 
 export default function ClassesSection() {
     return (
-        <div id="classes" className="w-full flex flex-col items-center py-20">
+        <div id="classes" className="w-full bg-background-light flex flex-col items-center py-20">
             <div className="max-w-4xl mx-auto px-6 w-full">
                 <h2 className="text-center text-3xl font-bold mb-10">Weekly Schedule</h2>
 
