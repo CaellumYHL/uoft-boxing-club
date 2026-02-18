@@ -1,11 +1,11 @@
 'use client';
 
 import Link from 'next/link';
+import Image from 'next/image';
 import { ShoppingCart } from 'lucide-react';
 import { useCart } from '../context/CartContext';
 import { usePathname } from 'next/navigation';
 import { useEffect, useState } from 'react';
-import GloveIcon from './GloveIcon';
 
 export default function Navbar() {
   const { totalItems, totalPrice } = useCart();
@@ -72,10 +72,10 @@ export default function Navbar() {
   const getHref = (section: string) => (pathname === '/' ? `#${section}` : `/#${section}`);
 
   return (
-    <nav className="fixed top-0 left-0 right-0 z-50 w-full flex justify-between items-center py-6 px-12 bg-background/95 backdrop-blur-md shadow-md">
+    <nav className="fixed top-0 left-0 right-0 z-50 w-full flex justify-between items-center py-6 px-12 backdrop-blur-md shadow-md">
       {/* Logo */}
       <Link href={getHref('home')}>
-        <GloveIcon className="w-16 h-16 text-primary hover:opacity-80 transition-opacity" />
+        <Image src="/favicon.ico" alt="UofT Boxing Club" width={64} height={64} className="hover:opacity-80 transition-opacity" />
       </Link>
 
       {/* Navigation Links */}
