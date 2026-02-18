@@ -2,7 +2,7 @@ import Navbar from '../../components/Navbar';
 import Link from 'next/link';
 import { getProducts } from '../../utils/productService';
 
-export const dynamic = 'force-dynamic'; // Ensure we get fresh data from JSON
+
 
 export default function Store() {
   const products = getProducts();
