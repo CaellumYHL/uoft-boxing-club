@@ -1,9 +1,11 @@
 import type { NextConfig } from "next";
 
+const isProd = process.env.NODE_ENV === 'production';
+
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   output: 'export',      // Tells Next.js to build static HTML
-  basePath: '/uoft-boxing-club',  // Required for GitHub Pages (repo name subpath)
+  basePath: isProd ? '/uoft-boxing-club' : '',  // Only use basePath for GitHub Pages
   // distDir: 'out',        // Tells it to put files in the folder Firebase looks for
 
   images: {
