@@ -8,7 +8,9 @@ export interface Product {
 }
 
 export interface TeamMember {
+    name: string;
     role: string;
+    bio?: string;
     image?: string;
 }
 
@@ -45,20 +47,6 @@ export const products: Product[] = [
     },
 ];
 
-export const teamMembers: TeamMember[] = [
-    {
-        role: 'Head Coach',
-    },
-    {
-        role: 'Coach / Treasurer',
-    },
-    {
-        role: 'Coach',
-    },
-    {
-        role: 'President',
-    },
-];
 
 export const CONSTANTS = {
     GOOGLE_FORM_URL: "https://docs.google.com/forms/d/your-form-id-here",
