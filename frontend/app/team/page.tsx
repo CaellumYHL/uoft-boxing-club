@@ -10,13 +10,46 @@ export default function Team() {
     const [error, setError] = useState<string | null>(null);
 
     useEffect(() => {
-        fetch('/api/team')
+        const apiKey = process.env.NEXT_PUBLIC_GOOGLE_SHEETS_API_KEY;
+        const sheetId = process.env.NEXT_PUBLIC_GOOGLE_SHEETS_ID;
+        const range = process.env.NEXT_PUBLIC_GOOGLE_SHEETS_RANGE || 'Sheet1!A:D';
+
+        if (!apiKey || !sheetId) {
+            setError('Google Sheets configuration missing.');
+            setLoading(false);
+            return;
+        }
+
+        const url = `https://sheets.googleapis.com/v4/spreadsheets/${sheetId}/values/${encodeURIComponent(range)}?key=${apiKey}`;
+
+        fetch(url)
             .then((res) => {
                 if (!res.ok) throw new Error('Failed to load team data');
                 return res.json();
             })
             .then((data) => {
-                setMembers(data);
+                const rows: string[][] = data.values || [];
+                if (rows.length < 2) {
+                    setMembers([]);
+                    setLoading(false);
+                    return;
+                }
+
+                const headers = rows[0].map((h: string) => h.trim().toLowerCase());
+                const parsed: TeamMember[] = rows.slice(1).map((row: string[]) => {
+                    const entry: Record<string, string> = {};
+                    headers.forEach((header: string, i: number) => {
+                        entry[header] = row[i]?.trim() || '';
+                    });
+                    return {
+                        name: entry['name'] || '',
+                        role: entry['role'] || '',
+                        bio: entry['bio'] || '',
+                        image: entry['image'] || '',
+                    };
+                }).filter((m) => m.name || m.role);
+
+                setMembers(parsed);
                 setLoading(false);
             })
             .catch((err) => {
