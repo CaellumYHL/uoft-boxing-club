@@ -7,6 +7,8 @@ import { useCart } from '../context/CartContext';
 import { usePathname } from 'next/navigation';
 import { useEffect, useState } from 'react';
 
+const basePath = process.env.NEXT_PUBLIC_BASE_PATH || '';
+
 export default function Navbar() {
   const { totalItems, totalPrice } = useCart();
   const pathname = usePathname();
@@ -22,7 +24,7 @@ export default function Navbar() {
     // Default to 'home' on initial load if at top
     if (window.scrollY < 100) {
       setActiveSection('home');
-      window.history.replaceState(null, '', '/#home');
+      window.history.replaceState(null, '', `${basePath}/#home`);
     }
 
     const sections = ['home', 'classes', 'events'];
@@ -37,7 +39,7 @@ export default function Navbar() {
               if (entry.isIntersecting) {
                 setActiveSection(id);
                 // Update URL hash when section becomes visible
-                window.history.replaceState(null, '', `/#${id}`);
+                window.history.replaceState(null, '', `${basePath}/#${id}`);
               }
             });
           },
@@ -69,7 +71,7 @@ export default function Navbar() {
   const linkBaseClasses = "hover:text-gray-300 transition-colors cursor-pointer";
 
   // Helper for hrefs (Hash links if on Home, Full URL otherwise)
-  const getHref = (section: string) => (pathname === '/' ? `#${section}` : `/#${section}`);
+  const getHref = (section: string) => (pathname === '/' ? `#${section}` : `${basePath}/#${section}`);
 
   return (
     <nav className="fixed top-0 left-0 right-0 z-50 w-full flex justify-between items-center py-6 px-12 backdrop-blur-md shadow-md">

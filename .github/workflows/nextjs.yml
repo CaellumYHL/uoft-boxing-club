@@ -82,6 +82,7 @@ jobs:
           NEXT_PUBLIC_GOOGLE_SHEETS_API_KEY: ${{ vars.NEXT_PUBLIC_GOOGLE_SHEETS_API_KEY }}
           NEXT_PUBLIC_GOOGLE_SHEETS_ID: ${{ vars.NEXT_PUBLIC_GOOGLE_SHEETS_ID }}
           NEXT_PUBLIC_GOOGLE_SHEETS_RANGE: ${{ vars.NEXT_PUBLIC_GOOGLE_SHEETS_RANGE }}
+          NEXT_PUBLIC_BASE_PATH: /uoft-boxing-club
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
