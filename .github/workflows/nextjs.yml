@@ -78,6 +78,10 @@ jobs:
       - name: Build with Next.js
         run: ${{ steps.detect-package-manager.outputs.runner }} next build
         working-directory: ./frontend
+        env:
+          NEXT_PUBLIC_GOOGLE_SHEETS_API_KEY: ${{ vars.NEXT_PUBLIC_GOOGLE_SHEETS_API_KEY }}
+          NEXT_PUBLIC_GOOGLE_SHEETS_ID: ${{ vars.NEXT_PUBLIC_GOOGLE_SHEETS_ID }}
+          NEXT_PUBLIC_GOOGLE_SHEETS_RANGE: ${{ vars.NEXT_PUBLIC_GOOGLE_SHEETS_RANGE }}
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
