@@ -14,7 +14,7 @@ export async function GET() {
 
     if (!apiKey || !sheetId) {
         return NextResponse.json(
-            { error: 'Google Sheets configuration missing. Set GOOGLE_SHEETS_API_KEY and GOOGLE_SHEETS_ID in .env.local' },
+            { error: 'Google Sheets configuration missing.' },
             { status: 500 }
         );
     }
