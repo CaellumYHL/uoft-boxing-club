@@ -7,6 +7,9 @@ import { useCart } from '../context/CartContext';
 import { usePathname } from 'next/navigation';
 import { useEffect, useState } from 'react';
 
+// basePath for raw browser APIs (replaceState) that don't auto-prepend like <Link> does
+const basePath = process.env.NEXT_PUBLIC_BASE_PATH || '';
+
 export default function Navbar() {
   const { totalItems, totalPrice } = useCart();
   const pathname = usePathname();
@@ -22,7 +25,7 @@ export default function Navbar() {
     // Default to 'home' on initial load if at top
     if (window.scrollY < 100) {
       setActiveSection('home');
-      window.history.replaceState(null, '', `/#home`);
+      window.history.replaceState(null, '', `${basePath}/#home`);
     }
 
     const sections = ['home', 'classes', 'events'];
@@ -37,7 +40,7 @@ export default function Navbar() {
               if (entry.isIntersecting) {
                 setActiveSection(id);
                 // Update URL hash when section becomes visible
-                window.history.replaceState(null, '', `/#${id}`);
+                window.history.replaceState(null, '', `${basePath}/#${id}`);
               }
             });
           },
