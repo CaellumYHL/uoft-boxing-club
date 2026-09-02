@@ -104,8 +104,8 @@ jobs:
     steps:
       - name: Deploy to GitHub Pages
         id: deployment
+        # The 2026-08-06 run failed here, not in the build: the Pages
+        # deployment sat in `deployment_queued` past this action's 10-minute
+        # limit and was cancelled. That limit is also the maximum the action
+        # accepts, so it cannot be raised - re-run the workflow if it recurs.
         uses: actions/deploy-pages@v4
-        with:
-          # The default 10 minutes isn't always enough when the Pages queue is
-          # backed up - a previous run was cancelled mid-queue because of it.
-          timeout: 1800000
