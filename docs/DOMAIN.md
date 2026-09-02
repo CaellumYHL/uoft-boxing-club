@@ -1,40 +1,36 @@
-# Putting the site on a custom domain
+# Moving the site to your own domain
 
-The site currently lives at <https://caellumyhl.github.io/uoft-boxing-club/>.
-Moving it to something like `uoftboxing.ca` takes three steps.
+The site is at <https://caellumyhl.github.io/uoft-boxing-club/> right now.
+Moving it to something like `uoftboxing.ca` takes four steps.
 
-Nothing here is done yet - the repository is *prepared* for it, and the code
-change in step 2 is the only one needed.
+None of this is done yet. The repo is ready for it, and step 2 is the only code
+change needed.
 
 ## 1. Buy the domain
 
-Any registrar works (Namecheap, Cloudflare, Google Domains successors, etc.).
-A `.ca` costs roughly $15-20/year. Buy it on an account the club will still
-control after this year's execs graduate - a club account, not a personal one.
+Any registrar works. A `.ca` costs about $15-20 a year.
 
-## 2. Tell the build the site is at the domain root
+Buy it on a club account, not a personal one. Otherwise the club loses the
+domain when whoever bought it graduates.
 
-Right now every URL is prefixed with `/uoft-boxing-club` because that is the
-GitHub Pages project path. On a custom domain the site sits at the root, so
-that prefix has to go.
+## 2. Tell the build the site is at the root
 
-In `.github/workflows/nextjs.yml`, set the base path to empty:
+Every URL currently starts with `/uoft-boxing-club`, because that's the folder
+GitHub Pages serves the site from. On your own domain the site sits at the root,
+so that part has to go.
+
+In `.github/workflows/nextjs.yml`, change this line:
 
 ```yaml
 NEXT_PUBLIC_BASE_PATH: ""
 ```
 
-and in `frontend/next.config.ts`, set:
+That's the whole change. `frontend/next.config.ts` already reads that value, so
+you don't need to edit it.
 
-```ts
-const basePath = process.env.NEXT_PUBLIC_BASE_PATH ?? '';
-```
+## 3. Point the domain at GitHub
 
-(It already reads that variable - you only need to change the value.)
-
-## 3. Point DNS at GitHub
-
-At your registrar, add these records for the apex domain:
+At your registrar, add these records:
 
 | Type | Name | Value |
 | --- | --- | --- |
@@ -44,16 +40,18 @@ At your registrar, add these records for the apex domain:
 | A | `@` | `185.199.111.153` |
 | CNAME | `www` | `caellumyhl.github.io.` |
 
-Then in the repository: **Settings > Pages > Custom domain**, enter the domain
-and save. GitHub writes a `CNAME` file into the repository automatically.
+Then in the repo, go to **Settings > Pages > Custom domain**, type in the domain
+and save. GitHub adds a `CNAME` file to the repo for you.
 
-Wait for the **Enforce HTTPS** checkbox to become available (GitHub has to issue
-a certificate first - usually under an hour, occasionally up to 24) and tick it.
+Wait for the **Enforce HTTPS** box to become clickable, then tick it. GitHub has
+to issue a certificate first, which usually takes under an hour but can take up
+to a day.
 
 ## 4. Afterwards
 
-- Add the new domain to the API key's allowed referrers
-  (see step 3 of [`EXEC_GUIDE.md`](EXEC_GUIDE.md)), or the schedule and store
-  will stop loading on the new address.
-- The old `caellumyhl.github.io/uoft-boxing-club` address redirects to the new
-  domain automatically.
+Add the new domain to the API key's allowed websites (step 3 of
+[`EXEC_GUIDE.md`](EXEC_GUIDE.md)). If you skip this, the schedule and the store
+will stop loading on the new address.
+
+The old `caellumyhl.github.io/uoft-boxing-club` address will redirect to the new
+domain on its own.

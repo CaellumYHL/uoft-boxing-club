@@ -1,201 +1,241 @@
-# Running the UofT Boxing Club website
+# How to update the website
 
-You do not need to touch any code to run this site. Almost everything you will
-ever want to change lives in **one Google Sheet**. Edit the sheet, and the
-website updates within about a minute - no rebuild, no developer needed.
+You don't need to touch any code to run this site. Almost everything you'll
+want to change lives in one Google Sheet. Edit the sheet, and the website
+updates in about a minute.
 
-This guide covers the one-time setup, then the day-to-day editing.
+There are only two places you can change things:
+
+- **The Google Sheet.** Changes show up on the site on their own.
+- **GitHub settings.** Changes here need someone to re-run the deploy.
+
+Almost everything is in the sheet.
 
 ---
 
-## Part 1 - One-time setup
+## What's already set up
 
-Do this once. It takes about 30 minutes.
+- **Meet Our Team** works. It reads the `Sheet1` tab.
+- **The class schedule** works. It's connected to the club's Google Calendar.
+  If it looks empty, there are no classes booked in that week.
+- **The store** works, with six built-in items. The cart works.
+- **Phones** work on every page.
 
-### 1. Create the content spreadsheet
+Three things are left, and they're all in the setup below:
 
-Make a new Google Sheet called **UofT Boxing Club - Website Content**, with
-five tabs named exactly:
+1. Add three tabs to the sheet: `Config`, `Events`, `Products`.
+2. Turn on order taking (steps 4-6).
+3. Paste your sign-up and waiver form links into the `Config` tab.
 
-`Config`, `Team`, `Events`, `Products`, `Orders`
+Until you do these, the site uses its own defaults. Nothing is broken.
 
-The `Orders` tab creates itself once the first order comes in, so you only need
-to make the first four by hand.
+---
 
-Put the headers below in **row 1** of each tab. Column order does not matter -
-the site matches on the header name - but the spelling does.
+## Setup
 
-**Config** (two columns, no header needed)
+Do these once, in order. It takes about half an hour.
 
-| key | value |
-| --- | --- |
-| `clubName` | UofT Boxing Club |
-| `contactEmail` | uoftboxingclub@gmail.com |
-| `instagramUrl` | https://www.instagram.com/uoftboxingclub/ |
-| `locationName` | St. Michaels College Wellness Studio |
-| `locationAddress` | 81 Mary Street |
-| `logoUrl` | *(a Google Drive share link - see below)* |
-| `classSignupUrl` | *(Google Form link for class sign-ups)* |
-| `waiverUrl` | *(Google Form link for the safety waiver)* |
-| `eventSignupUrl` | *(default Google Form link for events)* |
-| `freeClassLabel` | Free Classes |
-| `paidClassLabel` | Paid Classes |
+### 1. Add the three missing tabs
 
-Leave any row blank and the site quietly uses its built-in default.
+The sheet has one tab of team data right now. Add three more, named exactly:
 
-**Team**
+`Config`, `Events`, `Products`
 
-| name | role | bio | image |
-| --- | --- | --- | --- |
+Put the headers from the [Sheet reference](#sheet-reference) below into row 1 of
+each. The order of the columns doesn't matter, but the spelling of the headers
+does.
 
-**Events**
+You don't need to make an `Orders` tab. It gets made for you the first time
+someone places an order.
 
-| title | when | location | description | image | emoji | signupurl |
-| --- | --- | --- | --- | --- | --- | --- |
+### 2. Check the sheet is shared
 
-`when` is free text - write it however you like, e.g. `Sept 20 (6 PM to 8 PM)`.
-`signupurl` is optional; without it the event uses `eventSignupUrl` from Config.
+Under **Share > General access**, it should say *Anyone with the link > Viewer*.
+The site only reads from the sheet, never writes to it.
 
-**Products**
+Because of that, treat everything in this sheet as public. Don't put member
+contact details or anything private in it. The `Orders` tab is the exception:
+it's written by the script in step 4, and the website can't read it.
 
-| id | name | price | description | image | sizes | category |
-| --- | --- | --- | --- | --- | --- | --- |
+### 3. Lock down the API key
 
-- `category` must be `membership` or `merch` (anything else counts as merch).
-- `sizes` is a comma-separated list, e.g. `S, M, L, XL`. Leave it blank for
-  items that have no size - the size picker disappears.
-- `id` is optional. Leave it blank and it is generated from the name.
-  **If you set one, don't change it later** - it is part of the item's web address.
+The club already has a Google API key, so there's nothing new to make. Open it
+in the [Google Cloud credentials page](https://console.cloud.google.com/apis/credentials)
+and check two settings:
 
-### 2. Make the sheet readable by the website
+- **Websites**: allow `https://caellumyhl.github.io/*` only.
+- **APIs**: Google Sheets API and Google Calendar API only.
 
-**Share > General access > Anyone with the link > Viewer.**
-
-The site reads the sheet with a read-only API key, so it can only ever read.
-Never put anything private in this spreadsheet - treat everything in it as
-public. Orders are the exception and are written by the script in step 4, which
-runs as you and is not readable by the website.
-
-### 3. Create a Google API key
-
-1. Go to <https://console.cloud.google.com/> and create a project.
-2. **APIs & Services > Library** - enable **Google Sheets API** and
-   **Google Calendar API**.
-3. **APIs & Services > Credentials > Create credentials > API key**.
-4. Click **Edit API key** and restrict it:
-   - *Application restrictions*: **Websites**, allowed referrer
-     `https://caellumyhl.github.io/*` (add your custom domain too, once you have one).
-   - *API restrictions*: **Google Sheets API** and **Google Calendar API** only.
-
-Restricting the key matters: an unrestricted key can be copied off the site and
-used by anyone against your quota.
+This matters. The key is visible in the page source, so if it isn't restricted,
+anyone can copy it and use up the club's quota.
 
 ### 4. Set up order taking
 
-1. In the spreadsheet: **Extensions > Apps Script**.
-2. Delete the placeholder code and paste in the contents of
-   [`docs/apps-script/Code.gs`](apps-script/Code.gs) from this repository.
-3. Set `NOTIFY_EMAIL` at the top to the address that should be emailed for each
-   new order (leave it blank for no emails).
-4. **Deploy > New deployment > Web app**:
-   - *Execute as*: **Me**
-   - *Who has access*: **Anyone**
-5. Copy the deployment URL - it ends in `/exec`.
+In the sheet, go to **Extensions > Apps Script**. Delete whatever is there and
+paste in the contents of [`apps-script/Code.gs`](apps-script/Code.gs) from this
+repository.
 
-Orders arrive on the `Orders` tab, one row per item, with **Paid** and
-**Delivered** checkboxes and a filter on the header row so you can sort by
-whatever you need.
+At the top of that file, set `NOTIFY_EMAIL` to the address that should get an
+email for each new order. Leave it blank if you don't want emails.
 
-### 5. Make the class calendar
+Then click **Deploy > New deployment > Web app** and set:
 
-Create a Google Calendar for classes and make it public
-(**Settings > Access permissions > Make available to public**). Copy its
-**Calendar ID** from *Integrate calendar*.
+- Execute as: **Me**
+- Who has access: **Anyone**
 
-How the site reads your entries:
+Copy the URL it gives you. It ends in `/exec`.
 
-- Put **`drop`** anywhere in the title of a free drop-in session (e.g.
-  `Drop-in Boxing`) and it shows in the *Free Classes* colour. Everything else
-  shows as a paid class.
-- Start the title with **`Event:`** (e.g. `Event: Sparring Night`) for one-off
-  events, which get their own colour on the schedule and the home page.
+### 5. Give the site that URL
 
-### 6. Tell the website about all of it
+In GitHub, go to **Settings > Secrets and variables > Actions**, then the
+**Variables** tab. Add one variable:
 
-In GitHub, go to the repository > **Settings** > **Secrets and variables** >
-**Actions** > **Variables** tab, and add:
+- Name: `NEXT_PUBLIC_ORDERS_WEBHOOK_URL`
+- Value: the `/exec` URL from step 4
 
-| Variable | Value |
+The other five variables the site needs are already set. This is the only one
+to add.
+
+### 6. Re-run the deploy
+
+Go to the **Actions** tab, pick **Deploy Next.js site to Pages**, and click
+**Run workflow**. Wait about two minutes.
+
+The store can now take orders.
+
+---
+
+## Everyday changes
+
+None of these need a deploy.
+
+**Change the logo.** Upload it to Google Drive, share it as *anyone with the
+link*, copy the link, and paste it into the `logoUrl` row of the `Config` tab.
+The normal Drive link works. The site converts it for you. Same goes for team
+photos, event photos and product photos.
+
+**Add someone to the team page.** Add a row to `Sheet1`. You only need a name or
+a role. Without a photo, you get their first initial in a circle.
+
+**Add an event.** Add a row to the `Events` tab. Delete the row once the event
+has passed.
+
+**Add or reprice a store item.** Add or edit a row on the `Products` tab.
+
+**Remove a store item.** Delete its row. If you'd shared a link straight to that
+item, that link will now say "Product Not Found". That's normal.
+
+**Change class times.** Edit the Google Calendar. The schedule and the
+"Upcoming Classes" box on the home page both follow it.
+
+**Handle an order.** Look at the `Orders` tab. Tick **Paid** and **Delivered** as
+you go. Use the filter arrows on the header row to sort. Setting the *Delivered*
+filter to `FALSE` shows you what still needs handing over.
+
+---
+
+## Sheet reference
+
+Put these in row 1 of each tab. If you leave a cell blank, the site uses its own
+default instead of breaking.
+
+### Config
+
+Two columns. The key goes in column A, the value in column B.
+
+| Key | What it changes |
 | --- | --- |
-| `NEXT_PUBLIC_GOOGLE_SHEETS_API_KEY` | the API key from step 3 |
-| `NEXT_PUBLIC_GOOGLE_SHEETS_ID` | the long id in the sheet's URL |
-| `NEXT_PUBLIC_GOOGLE_API_KEY` | the same API key from step 3 |
-| `NEXT_PUBLIC_GOOGLE_CALENDAR_ID` | the Calendar ID from step 5 |
-| `NEXT_PUBLIC_ORDERS_WEBHOOK_URL` | the `/exec` URL from step 4 |
+| `logoUrl` | The logo in the top bar |
+| `clubName` | The name in the footer |
+| `contactEmail` | The email box in the footer |
+| `instagramUrl` | The Instagram box in the footer |
+| `locationName` | The studio name on the home page |
+| `locationAddress` | The street address under it |
+| `classSignupUrl` | The "Sign Up for Classes" button under the schedule |
+| `waiverUrl` | The "Sign Safety Waiver" button. Hidden until you set it. |
+| `eventSignupUrl` | The sign-up link for events that don't have their own |
+| `freeClassLabel` | The wording of the first colour in the schedule key |
+| `paidClassLabel` | The wording of the second, for example "Members Only" |
 
-Then go to the **Actions** tab, pick **Deploy Next.js site to Pages**, and click
-**Run workflow**. After about two minutes the site is live with your content.
+### Events
 
-> These are build-time settings, so **changing one of these needs a redeploy**
-> (Actions > Run workflow). Changing the *spreadsheet* does not.
+| Column | Notes |
+| --- | --- |
+| `title` | The only one you have to fill in |
+| `when` | Write it however you like, e.g. `Sept 20 (6 PM to 8 PM)` |
+| `location` | Shown after the date |
+| `description` | A sentence or two |
+| `image` | A Drive link. If it's blank, the emoji is used instead. |
+| `emoji` | Stands in for a photo |
+| `signupurl` | Use this event's own sign-up link instead of the default one |
 
----
+An empty `Events` tab shows "no events scheduled" rather than old events.
 
-## Part 2 - Day-to-day editing
+### Products
 
-### Changing the logo
-
-Upload the logo to Google Drive, right-click it > **Share** > *Anyone with the
-link*, then **Copy link** and paste that link into the `logoUrl` row of the
-**Config** tab. The usual Drive sharing link works as-is - the site converts it
-to a direct image link for you. The same applies to team photos, event images
-and product photos.
-
-### Adding a team member
-
-Add a row to the **Team** tab. Only `name` or `role` is required.
-
-### Adding an event
-
-Add a row to the **Events** tab. Delete the row when the event has passed.
-
-### Adding or repricing a store item
-
-Add or edit a row on the **Products** tab. Prices, names, descriptions and
-photos all update on the live site within a minute.
-
-To **remove** an item, delete its row. If you had shared a direct link to that
-item, the link will show "Product Not Found" afterwards - that is expected.
-
-### Changing class times
-
-Edit the Google Calendar. The website's schedule follows it automatically, and
-so does the "Upcoming Classes" strip on the home page.
-
-### Handling orders
-
-Watch the **Orders** tab (and the notification emails, if you set them up).
-Tick **Paid** and **Delivered** as you go. Use the filter arrows on the header
-row to sort - for example, filter *Delivered* to `FALSE` to see what still owes
-a hand-off.
+| Column | Notes |
+| --- | --- |
+| `name` | The only one you have to fill in |
+| `price` | A number. No dollar sign. |
+| `description` | Shown on the item's own page |
+| `image` | A Drive link |
+| `sizes` | Separated by commas: `S, M, L, XL`. Blank hides the size picker. |
+| `category` | Either `membership` or `merch` |
+| `id` | Optional. Made from the name if you leave it blank. Once it's set, don't change it, because it's part of the item's web address. |
 
 ---
 
-## Troubleshooting
+## How the site reads your calendar
 
-**The site shows old content.** Content is cached briefly by the browser. Hard
-refresh (Cmd/Ctrl + Shift + R). If it persists, check the sheet is still shared
-as *Anyone with the link - Viewer*.
+Two things in the title of a calendar entry decide how it's shown.
 
-**The team/store/events section is empty.** Check the tab name and the header
-spelling in row 1. The site matches columns by header name.
+- Put **`drop`** anywhere in the title, like `Drop-in Boxing`, and it shows as a
+  free class in red.
+- Anything else shows as a paid class in blue.
+- Start the title with **`Event:`**, like `Event: Sparring Night`, and it shows
+  as an event in purple. The `Event:` part is taken off before it's shown, so
+  people just see "Sparring Night".
 
-**"Google Sheets configuration missing."** The repository variables in step 6
-aren't set, or the site hasn't been redeployed since they were added.
+Whatever you write in the calendar entry's description is shown on the site, so
+it's worth filling in.
 
-**Orders aren't arriving.** Re-deploy the Apps Script (**Deploy > Manage
-deployments > edit > Version: New version**). Apps Script keeps serving the old
-code until you publish a new version.
+On a phone the weekly grid turns into a day-by-day list, because four columns of
+days are too narrow to read on a phone screen.
 
-**Nothing on the schedule.** Confirm the calendar is public and the Calendar ID
-is right, and that there are events in the week being viewed.
+---
+
+## If something looks wrong
+
+**A section is empty.** Check the tab name and the spelling of the headers in
+row 1. The site looks up columns by their header name, so `Titles` won't be
+found where it expects `title`.
+
+**The site shows old content.** Hard refresh the page (Cmd+Shift+R on a Mac,
+Ctrl+Shift+R on Windows). If that doesn't fix it, check the sheet is still
+shared as *Anyone with the link > Viewer*.
+
+**A photo isn't showing.** The Drive file has to be shared as *anyone with the
+link*. If a cell isn't a link at all, it's ignored, so notes to yourself in an
+image column won't break anything.
+
+**Orders aren't coming through.** Re-deploy the Apps Script: **Deploy > Manage
+deployments**, then edit it and set Version to **New version**. Apps Script keeps
+running the old code until you do this.
+
+**The schedule is blank.** Check the calendar is public, and that there are
+classes in the week you're looking at. Use *Next* to check later weeks.
+
+**A deploy failed.** This is usually GitHub's queue, not anything you did.
+Re-run the workflow from the Actions tab.
+
+---
+
+## What still needs a developer
+
+- **A custom domain.** You buy it; the steps to hook it up are in
+  [`DOMAIN.md`](DOMAIN.md). Buy it on a club account, not a personal one, so it
+  doesn't disappear when this year's execs graduate.
+- **Card payments.** Right now orders get written down and paid in person.
+  Taking cards online needs Stripe and a proper backend.
+- **New kinds of pages**, beyond the home, store, team and cart pages.
+- **Changing a GitHub variable**, because someone has to re-run the deploy after.
