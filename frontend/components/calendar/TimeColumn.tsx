@@ -48,7 +48,11 @@ function GapIndicatorCell({
     rowIndex: number;
     rowDefs: RowDef[];
 }) {
-    const nextHourStr = formatHour((rowDefs[rowIndex - 1] as any).value + 1);
+    // buildRowDefs never emits a gap first or two gaps in a row, so the
+    // preceding row is always an hour row.
+    const previous = rowDefs[rowIndex - 1];
+    const previousHour = previous?.type === 'hour' ? previous.value : 0;
+    const nextHourStr = formatHour(previousHour + 1);
     const [h12, suffix] = nextHourStr.split(' ');
     const char1 = suffix[0];
     const char2 = suffix[1];

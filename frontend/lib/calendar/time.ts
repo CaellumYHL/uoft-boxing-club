@@ -77,3 +77,14 @@ export function formatHour(hour: number): string {
     const h12 = norm % 12 || 12;
     return `${h12} ${suffix}`;
 }
+/**
+ * The title to show for a calendar entry, with the "Event:" / "[event]"
+ * marker execs use to tag one-off events removed - the colour coding already
+ * says it is an event, so the prefix is just noise on screen.
+ *
+ * @param title - Raw calendar entry summary.
+ * @returns The title as it should be displayed.
+ */
+export function displayTitle(title: string): string {
+    return title.replace(/^\s*event:\s*/i, '').replace(/\s*\[event\]\s*/i, ' ').trim();
+}

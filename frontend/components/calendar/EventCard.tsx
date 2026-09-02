@@ -1,11 +1,12 @@
 import { ClassEvent } from '@/types/calendar';
-import { formatClassTime } from '@/lib/calendar/time';
+import { formatClassTime, displayTitle } from '@/lib/calendar/time';
 import { stripHtml } from '@/lib/calendar/dom';
-import { EVENT_COLORS } from '@/lib/calendar/constants';
+import { EVENT_COLORS, KIND_COLORS } from '@/lib/calendar/constants';
 
 /**
  * A single event's card within the grid: title, optional description, and
- * a "start – end" time caption. Background color reflects free vs paid.
+ * a "start – end" time caption. One-off events get their own colour; regular
+ * classes are coloured by whether they are free or paid.
  * HTML in title/description is stripped to plain text before rendering.
  *
  * @param cls - The event to render.
@@ -26,11 +27,11 @@ export function EventCard({
             style={{
                 gridColumn,
                 gridRow: gridRowSpan,
-                backgroundColor: EVENT_COLORS[cls.type],
+                backgroundColor: cls.kind === 'event' ? KIND_COLORS.event : EVENT_COLORS[cls.type],
             }}
             className="rounded-xl shadow-lg mx-2 my-1.5 p-2.5 flex flex-col justify-start text-left"
         >
-            <p className="font-bold text-sm leading-snug">{stripHtml(cls.title)}</p>
+            <p className="font-bold text-sm leading-snug">{displayTitle(stripHtml(cls.title))}</p>
             {cls.description && (
                 <p className="text-xs opacity-90 leading-snug mt-0.5">
                     {stripHtml(cls.description)}

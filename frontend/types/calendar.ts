@@ -1,3 +1,9 @@
+/** Whether a session is free to attend (drop-in) or requires a paid membership. */
+export type ClassType = 'free' | 'paid';
+
+/** Whether a calendar entry is a recurring class or a one-off club event. */
+export type ClassKind = 'class' | 'event';
+
 /** A single calendar event normalised from the Google Calendar API response. */
 export type ClassEvent = {
     id: string;
@@ -5,8 +11,9 @@ export type ClassEvent = {
     startDate: Date;
     endDate: Date;
     description: string;
-    type: 'free' | 'paid';
-    signupLink: string;
+    location: string;
+    type: ClassType;
+    kind: ClassKind;
 };
 
 

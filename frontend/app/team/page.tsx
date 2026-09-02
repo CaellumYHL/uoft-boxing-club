@@ -1,77 +1,25 @@
 'use client';
 
-import { useEffect, useState } from 'react';
 import Navbar from '../../components/Navbar';
-import { TeamMember } from '../../utils/data';
+import Footer from '../../components/Footer';
+import { useSheetTeam, TeamMember } from '@/hooks/useSheetTeam';
 
 export default function Team() {
-    const [members, setMembers] = useState<TeamMember[]>([]);
-    const [loading, setLoading] = useState(true);
-    const [error, setError] = useState<string | null>(null);
-
-    useEffect(() => {
-        const apiKey = process.env.NEXT_PUBLIC_GOOGLE_SHEETS_API_KEY;
-        const sheetId = process.env.NEXT_PUBLIC_GOOGLE_SHEETS_ID;
-        const range = process.env.NEXT_PUBLIC_GOOGLE_SHEETS_RANGE || 'Sheet1!A:D';
-
-        if (!apiKey || !sheetId) {
-            setError('Google Sheets configuration missing.');
-            setLoading(false);
-            return;
-        }
-
-        const url = `https://sheets.googleapis.com/v4/spreadsheets/${sheetId}/values/${encodeURIComponent(range)}?key=${apiKey}`;
-
-        fetch(url)
-            .then((res) => {
-                if (!res.ok) throw new Error('Failed to load team data');
-                return res.json();
-            })
-            .then((data) => {
-                const rows: string[][] = data.values || [];
-                if (rows.length < 2) {
-                    setMembers([]);
-                    setLoading(false);
-                    return;
-                }
-
-                const headers = rows[0].map((h: string) => h.trim().toLowerCase());
-                const parsed: TeamMember[] = rows.slice(1).map((row: string[]) => {
-                    const entry: Record<string, string> = {};
-                    headers.forEach((header: string, i: number) => {
-                        entry[header] = row[i]?.trim() || '';
-                    });
-                    return {
-                        name: entry['name'] || '',
-                        role: entry['role'] || '',
-                        bio: entry['bio'] || '',
-                        image: entry['image'] || '',
-                    };
-                }).filter((m) => m.name || m.role);
-
-                setMembers(parsed);
-                setLoading(false);
-            })
-            .catch((err) => {
-                console.error(err);
-                setError('Could not load team members. Please try again later.');
-                setLoading(false);
-            });
-    }, []);
+    const { data: members, loading, error } = useSheetTeam();
 
     return (
-        <main className="min-h-screen bg-background text-white pb-20">
+        // Lighter blue background distinguishes this page from the rest (issue #18).
+        <main className="min-h-screen bg-background-light text-white flex flex-col">
             <Navbar />
 
-            <div className="max-w-6xl mx-auto px-6 pt-32">
-                <h1 className="text-5xl font-bold text-center mb-16">Meet Our Team</h1>
+            <div className="flex-1 w-full max-w-6xl mx-auto px-4 sm:px-6 pt-28 lg:pt-32 pb-20">
+                <h1 className="text-4xl sm:text-5xl font-bold text-center mb-12 sm:mb-16">Meet Our Team</h1>
 
-                {/* Loading State */}
                 {loading && (
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
+                    <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12">
                         {[1, 2, 3, 4].map((i) => (
-                            <div key={i} className="bg-white/5 backdrop-blur-sm rounded-2xl p-8 flex flex-col md:flex-row gap-8 items-center border border-white/10 animate-pulse">
-                                <div className="w-40 h-40 bg-gray-700 rounded-full flex-shrink-0" />
+                            <div key={i} className="bg-white/5 backdrop-blur-sm rounded-2xl p-6 sm:p-8 flex flex-col sm:flex-row gap-6 sm:gap-8 items-center border border-white/10 animate-pulse">
+                                <div className="w-32 h-32 sm:w-40 sm:h-40 bg-gray-700 rounded-full flex-shrink-0" />
                                 <div className="flex-1 space-y-3 w-full">
                                     <div className="h-4 bg-gray-700 rounded w-1/3" />
                                     <div className="h-6 bg-gray-700 rounded w-2/3" />
@@ -82,56 +30,56 @@ export default function Team() {
                     </div>
                 )}
 
-                {/* Error State */}
                 {error && (
                     <div className="text-center py-16">
                         <p className="text-red-400 text-lg">{error}</p>
                     </div>
                 )}
 
-                {/* Empty State */}
                 {!loading && !error && members.length === 0 && (
                     <div className="text-center py-16">
-                        <p className="text-gray-400 text-lg">No team members to display.</p>
+                        <p className="text-gray-300 text-lg">No team members to display.</p>
                     </div>
                 )}
 
-                {/* Members Grid */}
                 {!loading && !error && members.length > 0 && (
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
+                    <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12">
                         {members.map((member, index) => (
-                            <div key={`${member.role}-${index}`} className="bg-white/5 backdrop-blur-sm rounded-2xl p-8 flex flex-col md:flex-row gap-8 items-center border border-white/10 hover:border-white/30 transition shadow-xl">
-
-                                {/* Avatar */}
-                                <div className="w-40 h-40 bg-gray-600 rounded-full flex-shrink-0 border-4 border-secondary overflow-hidden flex items-center justify-center">
-                                    {member.image ? (
-                                        <img
-                                            src={member.image}
-                                            alt={member.name || member.role}
-                                            className="w-full h-full object-cover"
-                                        />
-                                    ) : (
-                                        <span className="text-4xl text-gray-400">
-                                            {member.name ? member.name.charAt(0).toUpperCase() : '?'}
-                                        </span>
-                                    )}
-                                </div>
-
-                                {/* Info */}
-                                <div className="text-center md:text-left">
-                                    <p className="text-secondary font-bold uppercase tracking-wider text-sm mb-2">{member.role}</p>
-                                    {member.name && (
-                                        <h3 className="text-2xl font-semibold mb-3">{member.name}</h3>
-                                    )}
-                                    {member.bio && (
-                                        <p className="text-gray-300 leading-relaxed">{member.bio}</p>
-                                    )}
-                                </div>
-                            </div>
+                            <MemberCard key={`${member.role}-${index}`} member={member} />
                         ))}
                     </div>
                 )}
             </div>
+
+            <Footer />
         </main>
+    );
+}
+
+/** A single team member card: avatar (or initial), role, name and bio. */
+function MemberCard({ member }: { member: TeamMember }) {
+    return (
+        <div className="bg-white/5 backdrop-blur-sm rounded-2xl p-6 sm:p-8 flex flex-col sm:flex-row gap-6 sm:gap-8 items-center border border-white/10 hover:border-white/30 transition shadow-xl">
+            <div className="w-32 h-32 sm:w-40 sm:h-40 bg-gray-600 rounded-full flex-shrink-0 border-4 border-secondary overflow-hidden flex items-center justify-center">
+                {member.image ? (
+                    <img
+                        src={member.image}
+                        alt={member.name || member.role}
+                        className="w-full h-full object-cover"
+                        loading="lazy"
+                    />
+                ) : (
+                    <span className="text-4xl text-gray-300">
+                        {member.name ? member.name.charAt(0).toUpperCase() : '?'}
+                    </span>
+                )}
+            </div>
+
+            <div className="text-center sm:text-left">
+                <p className="text-secondary font-bold uppercase tracking-wider text-sm mb-2">{member.role}</p>
+                {member.name && <h3 className="text-xl sm:text-2xl font-semibold mb-3">{member.name}</h3>}
+                {member.bio && <p className="text-gray-300 leading-relaxed">{member.bio}</p>}
+            </div>
+        </div>
     );
 }

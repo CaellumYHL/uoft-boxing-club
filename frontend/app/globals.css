@@ -18,6 +18,29 @@ html {
   scroll-behavior: smooth;
 }
 
+/*
+  The navbar is fixed, so anchor targets must reserve its height or the section
+  heading lands underneath it. Matches the navbar's ~68px mobile / ~104px
+  desktop height plus a little breathing room.
+*/
+:target,
+[id="home"],
+[id="classes"],
+[id="events"],
+[id="contact"] {
+  scroll-margin-top: 5rem;
+}
+
+@media (min-width: 1024px) {
+  :target,
+  [id="home"],
+  [id="classes"],
+  [id="events"],
+  [id="contact"] {
+    scroll-margin-top: 7rem;
+  }
+}
+
 body {
   background-color: var(--background);
   background-image:

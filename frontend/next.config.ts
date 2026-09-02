@@ -1,13 +1,19 @@
 import type { NextConfig } from "next";
 
-const isProd = process.env.NODE_ENV === 'production';
+/**
+ * Base path the site is served from. GitHub Pages serves project sites under
+ * /<repo>, so CI sets NEXT_PUBLIC_BASE_PATH; local dev leaves it unset.
+ *
+ * This is the single source of truth: client code reads the same env var (via
+ * lib/site.ts) for raw browser APIs like history.replaceState and <img src>,
+ * so the two can never drift apart.
+ */
+const basePath = process.env.NEXT_PUBLIC_BASE_PATH || '';
 
-/** @type {import('next').NextConfig} */
-const nextConfig = {
-  output: 'export',      // Tells Next.js to build static HTML
-  basePath: isProd ? '/uoft-boxing-club' : '',  // Only use basePath for GitHub Pages
-  assetPrefix: isProd ? '/uoft-boxing-club/' : undefined,  // Ensure assets load from correct path
-  // distDir: 'out',        // Tells it to put files in the folder Firebase looks for
+const nextConfig: NextConfig = {
+  output: 'export',   // Static HTML export - there is no server at runtime.
+  basePath,
+  assetPrefix: basePath || undefined,
 
   images: {
     unoptimized: true,

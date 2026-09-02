@@ -8,6 +8,7 @@ import { CalendarNav } from '@/components/calendar/CalendarNav';
 import { CalendarLegend } from '@/components/calendar/CalendarLegend';
 import { DayHeaderRow } from './DayHeaderRow';
 import { CalendarGrid } from './CalendarGrid';
+import { AgendaList } from './AgendaList';
 
 
 export default function Calendar() {
@@ -70,29 +71,36 @@ export default function Calendar() {
                         </div>
                     </div>
                 ) : (
-                    <div className="flex flex-col flex-1 overflow-hidden">
-
-                        <DayHeaderRow days={daysWithEvents} colCount={colCount} headerRef={headerRef} />
-
-                        {/* Scrollable body */}
-                        <div
-                            className="overflow-y-auto flex-1 border-r border-white/10"
-                            style={{
-                                scrollbarWidth: 'thin',
-                                scrollbarColor: 'rgba(255,255,255,0.25) rgba(255,255,255,0.05)',
-                            }}
-                        >
-                            <CalendarGrid
-                                rowDefs={rowDefs}
-                                hourToRow={hourToRow}
-                                daysWithEvents={daysWithEvents}
-                                classesByDay={classesByDay}
-                                hourRowPx={hourRowPx}
-                                colCount={colCount}
-                            />
+                    <>
+                        {/* Phones get a day-by-day agenda; the hour grid needs width. */}
+                        <div className="lg:hidden flex-1 min-h-0">
+                            <AgendaList days={daysWithEvents} classesByDay={classesByDay} />
                         </div>
 
-                    </div>
+                        <div className="hidden lg:flex flex-col flex-1 overflow-hidden">
+
+                            <DayHeaderRow days={daysWithEvents} colCount={colCount} headerRef={headerRef} />
+
+                            {/* Scrollable body */}
+                            <div
+                                className="overflow-y-auto flex-1 border-r border-white/10"
+                                style={{
+                                    scrollbarWidth: 'thin',
+                                    scrollbarColor: 'rgba(255,255,255,0.25) rgba(255,255,255,0.05)',
+                                }}
+                            >
+                                <CalendarGrid
+                                    rowDefs={rowDefs}
+                                    hourToRow={hourToRow}
+                                    daysWithEvents={daysWithEvents}
+                                    classesByDay={classesByDay}
+                                    hourRowPx={hourRowPx}
+                                    colCount={colCount}
+                                />
+                            </div>
+
+                        </div>
+                    </>
                 )}
             </div>
         </div>

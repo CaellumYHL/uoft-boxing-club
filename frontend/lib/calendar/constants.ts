@@ -1,4 +1,4 @@
-import { ClassEvent } from "@/types/calendar";
+import { ClassKind, ClassType } from "@/types/calendar";
 
 /** 
  * Minimum pixel height for a single hour row before the grid starts scrolling
@@ -26,7 +26,19 @@ export const ACCENT_COLOR = '#C92C2C';
  * Background colours for event cards and legend swatches, keyed by 
  * ClassEvent type. Also reused for the active-nav-button highlight.
  */
-export const EVENT_COLORS: Readonly<Record<ClassEvent['type'], string>> = {
+export const EVENT_COLORS: Readonly<Record<ClassType, string>> = {
     free: ACCENT_COLOR,
     paid: '#3B82F6',
+};
+
+/**
+ * Background colours distinguishing a recurring class from a one-off club
+ * event. Used by the home-page "Upcoming" strip and its key, which colour-code
+ * by kind rather than by free/paid.
+ */
+export const KIND_COLORS: Readonly<Record<ClassKind, string>> = {
+    class: ACCENT_COLOR,
+    // A third hue, distinct from both the red classes and the blue paid
+    // sessions, so events are unmistakable at a glance.
+    event: '#7C5CD6',
 };

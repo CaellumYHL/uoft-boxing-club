@@ -1,65 +1,68 @@
+'use client';
+
 import { useEffect, useState } from 'react';
-import { ClassEvent } from "@/types/calendar";
+import { ClassEvent } from '@/types/calendar';
+import { fetchCalendarEvents, isCalendarConfigured } from '@/lib/calendar/api';
 
 /**
  * Fetches and normalises Google Calendar events for the given week window.
- * Classifies each event as 'free' or 'paid' based on whether its title
- * contains 'drop' (drop-in classes are free). Silently no-ops if the
- * calendar ID / API key env vars are missing.
- * 
+ * Silently no-ops if the calendar ID / API key env vars are missing.
+ *
  * @param startOfWeek - Inclusive lower bound of the fetch window.
  * @param endOfWeek - Exclusive upper bound of the fetch window.
  * @returns `classes` (normalised events) and `loading` (fetch in flight).
  */
 export function useGoogleCalendarEvents(startOfWeek: Date, endOfWeek: Date): { classes: ClassEvent[]; loading: boolean } {
-    const calendarId = process.env.NEXT_PUBLIC_GOOGLE_CALENDAR_ID;
-    const apiKey = process.env.NEXT_PUBLIC_GOOGLE_API_KEY;
-
     const [classes, setClasses] = useState<ClassEvent[]>([]);
     const [loading, setLoading] = useState(false);
 
     useEffect(() => {
-        if (!calendarId || !apiKey) return;
+        if (!isCalendarConfigured()) return;
+        let cancelled = false;
+
+        // Shows the spinner while the week's fetch is in flight.
+        // eslint-disable-next-line react-hooks/set-state-in-effect
         setLoading(true);
-        fetch(
-            `https://www.googleapis.com/calendar/v3/calendars/${encodeURIComponent(calendarId)}/events` +
-            `?key=${apiKey}&singleEvents=true&orderBy=startTime` +
-            `&timeMin=${startOfWeek.toISOString()}&timeMax=${endOfWeek.toISOString()}`
-        )
-            .then(r => r.json())
-            .then((data: any) => {
-                const rawEvents = data.items || [];
-                const mapped: ClassEvent[] = rawEvents.map(mapApiEventToClass);
-                setClasses(mapped);
-            })
-            .catch(e => console.error('Calendar fetch failed', e))
-            .finally(() => setLoading(false));
+        fetchCalendarEvents(startOfWeek, endOfWeek)
+            .then((events) => { if (!cancelled) setClasses(events); })
+            .catch((e) => console.error('Calendar fetch failed', e))
+            .finally(() => { if (!cancelled) setLoading(false); });
+
+        return () => { cancelled = true; };
     }, [startOfWeek, endOfWeek]);
 
     return { classes, loading };
 }
 
-/**
- * Maps a raw Google Calendar API event resource into the app's ClassEvent
- * shape, defaulting missing dates to "now" and inferring the free/paid
- * type from the title.
- * 
- * @param ev - Raw event object from the Calendar API `items` array.
- * @returns Normalised ClassEvent.
- */
-function mapApiEventToClass(ev: any): ClassEvent {
-    const startStr = ev.start?.dateTime || ev.start?.date;
-    const endStr = ev.end?.dateTime || ev.end?.date;
-    const summary = ev.summary || '';
+/** How far ahead the "upcoming" strip looks for sessions. */
+const UPCOMING_WINDOW_DAYS = 60;
 
-    return {
-        id: ev.id,
-        title: summary,
-        startDate: startStr ? new Date(startStr) : new Date(),
-        endDate: endStr ? new Date(endStr) : new Date(),
-        description: ev.description || '',
-        type: summary.toLowerCase().includes('drop') ? 'free' : 'paid',
-        // TODO: remove the link option
-        signupLink: '#'
-    };
+/**
+ * Fetches the next few sessions starting from now, for the "Upcoming Classes"
+ * strip on the home page.
+ *
+ * @param count - Maximum number of sessions to return.
+ * @returns `classes` (soonest first) and `loading` (fetch in flight).
+ */
+export function useUpcomingClasses(count: number): { classes: ClassEvent[]; loading: boolean } {
+    const [classes, setClasses] = useState<ClassEvent[]>([]);
+    const [loading, setLoading] = useState(isCalendarConfigured());
+
+    useEffect(() => {
+        if (!isCalendarConfigured()) return;
+        let cancelled = false;
+
+        const now = new Date();
+        const horizon = new Date(now);
+        horizon.setDate(horizon.getDate() + UPCOMING_WINDOW_DAYS);
+
+        fetchCalendarEvents(now, horizon, count)
+            .then((events) => { if (!cancelled) setClasses(events.slice(0, count)); })
+            .catch((e) => console.error('Upcoming classes fetch failed', e))
+            .finally(() => { if (!cancelled) setLoading(false); });
+
+        return () => { cancelled = true; };
+    }, [count]);
+
+    return { classes, loading };
 }

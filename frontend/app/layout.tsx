@@ -1,7 +1,8 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Outfit } from "next/font/google";
 import "./globals.css";
 import { CartProvider } from "../context/CartContext";
+import { SiteConfigProvider } from "../context/SiteConfigContext";
 
 const outfit = Outfit({
   subsets: ["latin"],
@@ -16,6 +17,12 @@ export const metadata: Metadata = {
   },
 };
 
+/** Explicit mobile viewport so phones render at device width (issues #3, #17). */
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
+};
+
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -26,9 +33,11 @@ export default function RootLayout({
       <body
         className={`${outfit.variable} font-sans antialiased`}
       >
-        <CartProvider>
-          {children}
-        </CartProvider>
+        <SiteConfigProvider>
+          <CartProvider>
+            {children}
+          </CartProvider>
+        </SiteConfigProvider>
       </body>
     </html>
   );

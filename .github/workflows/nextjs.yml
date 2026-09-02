@@ -85,6 +85,10 @@ jobs:
           NEXT_PUBLIC_BASE_PATH: /uoft-boxing-club
           NEXT_PUBLIC_GOOGLE_CALENDAR_ID: ${{ vars.NEXT_PUBLIC_GOOGLE_CALENDAR_ID }}
           NEXT_PUBLIC_GOOGLE_API_KEY: ${{ vars.NEXT_PUBLIC_GOOGLE_API_KEY }}
+          NEXT_PUBLIC_SHEETS_RANGE_EVENTS: ${{ vars.NEXT_PUBLIC_SHEETS_RANGE_EVENTS }}
+          NEXT_PUBLIC_SHEETS_RANGE_PRODUCTS: ${{ vars.NEXT_PUBLIC_SHEETS_RANGE_PRODUCTS }}
+          NEXT_PUBLIC_SHEETS_RANGE_CONFIG: ${{ vars.NEXT_PUBLIC_SHEETS_RANGE_CONFIG }}
+          NEXT_PUBLIC_ORDERS_WEBHOOK_URL: ${{ vars.NEXT_PUBLIC_ORDERS_WEBHOOK_URL }}
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
@@ -101,3 +105,7 @@ jobs:
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
+        with:
+          # The default 10 minutes isn't always enough when the Pages queue is
+          # backed up - a previous run was cancelled mid-queue because of it.
+          timeout: 1800000
